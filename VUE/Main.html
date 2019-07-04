@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>China Systems</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+.img2{
+    background-position: center center;
+    background-repeat:  no-repeat;
+  }
+</style>
+<style>
+</style>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <link rel="shortcut icon" href="../../P:/Images/favicon.ico">
+  <link href="../P:/theme/softkeystyle.css" type="text/css" rel="stylesheet">
+  <script type="text/JavaScript" src="../../P:/SYS_JS/SYS_CrossBrowser.js"></script>
+  <script type="text/JavaScript" src="../../P:/SYS_JS/SYS_ActionFunc_CAL.js"></script>
+  <script type="text/JavaScript" src="../../P:/SYS_JS/SYS_Ajax.js"></script>
+  <script type="text/JavaScript" src="../../P:/SYS_JS/securityPd/SYS_SoftKeyBoard.js"></script>
+  <script type="text/JavaScript" src="../../P:/SYS_JS/securityPd/SYS_SecurityMode.js"></script>
+  <script type="text/JavaScript" src="../../P:/SYS_JS/securityPd/SYS_MD5.js"></script>
+  <link rel="stylesheet" href="../P:/theme/ext-all.css">
+  <Script language="javascript" src="../../P:/SYS_JS/Ext/ext-base.js"></Script>
+  <Script language="javascript" src="../../P:/SYS_JS/Ext/ext-all.js"></Script>   
+</head>
+<script>
+
+</script>
+<body>
+<form name="formLogin" method="post" action="screen/index.htm" autocomplete="off" >
+<div class="index">					
+  <input type="hidden" name="TRX_TYPE">
+     <input type="hidden" name="LOGIN_KEY" id="LOGIN_KEY" value = "">
+  <table class="img2" background="Images/timg.jpg"  width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr> 
+      <td background="Images/top_m.jpg"><img src="Images/top_l.jpg" width="281" height="86"></td>
+      <td background="Images/top_m.jpg" valign="top" align="right"></td>
+      <td background="Images/top_m.jpg"> 
+        <div align="right"><img src="Images/top_r.jpg" width="237" height="86"></div>
+      </td>
+    </tr>
+    <tr> 
+      <td height="405" colspan="3">   
+		<div id="LoginDiv" align="center"><br>
+          <table width="500" height="0" border="0" cellpadding="0" cellspacing="0">
+            <tr> 
+              <td width="500">&nbsp;</td>
+            </tr>
+            <tr> 
+              <td height="310"> 
+                <table height="206" border="0" cellpadding="0" cellspacing="0">
+                  <tr class="c10w"> 
+                    <td height="2" colspan="4">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td width="4" height="20">&nbsp;</td>
+                    <td width="1" height="20"><img src="Images/arrow.gif" width="8" height="11"></td>
+                    <td height="20" colspan="2"><img src="Images/login.jpg" width="55" height="21"></td>
+                  </tr>
+                  <tr> 
+                    <td height="168"> 
+                      <p>&nbsp;</p>
+                    </td>
+                    <td background="Images/vertical_line.gif">&nbsp;</td>
+                    <!--td width="14"--> 	
+					</div>					
+                    <td width="481" height="168" valign="bottom"><div id="MSG_ID" class="r10w" style="display:none"><B>Please wait a minute to continue...</B></div><br>
+                      <div align="right"> 
+                        <table width="96%" border="0" cellspacing="0" class="j10w">
+                          <tr> 
+                            <td width="30%" valign="top" class="r10w">Unit Code: 
+                            </td>
+                            <td width="70%"> 
+							  <el-input placeholder="Please enter value"></el-input>			
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td width="30%" valign="top" class="r10w">User ID: 
+                            </td>
+                            <td width="70%"> 
+							  <el-input placeholder="Please enter value"></el-input>							
+                              <!--input name="C_USER_ID" type="text" size="15" class="login" onKeydown="EEHtml.moveFocus();"-->
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td valign="top" class="r10w">Password: </td>
+                            <td > 
+							   <el-input  placeholder="Please enter value"></el-input>
+                               <!--input id="tipLogPwd" name="C_PASSWORD" type="password" autocomplete="off" size="15" class="login" onKeydown="if(EEHtml.getKeyCode()==13)btnLogin()"value=""-->
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td class="r10w">  
+								<!--input type="button" class="sbtn_default" name="Image1" value="Login" id="Image1" onClick="btnLogin()"  onMouseOver="this.className='sbtn_light'" onMouseOut="this.className='sbtn_default'" />
+								<input type="button" class="sbtn_default" name="Image2" value="Reset" id="Image2" onClick="btnReset()"  onMouseOver="this.className='sbtn_light'" onMouseOut="this.className='sbtn_default'" />
+								<img id="openKeyBoard" src="Images/buttons/Kb02.jpg" style="display:none;"
+									onclick="showkeyboard()" width="23" height="23"-->
+                            </td>
+							<td class="r10w"> 
+								<el-button @click="visible = true">Login</el-button>							
+								<el-button @click="visible = true">Reset</el-button>
+								<el-dialog :visible.sync="visible" title="Reset Infor">
+								<p>Do you want to reset the value already input?</p >
+							    </el-dialog>	
+							</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td height="8"></td>
+                    <td><img src="Images/joint_line.gif" width="8" height="8"></td>
+                    <td height="8" colspan="2" background="Images/horizontal_line.gif" align="right"><img src="Images/arrow_right.gif" width="7" height="8"></td>
+                  </tr>
+                  <tr class="l10w"> 
+                    <td height="8"></td>
+                    <td>&nbsp;</td>
+                    <td height="8" colspan="2" class="r10w">
+                    <font id="copyRight" color="#CCCCCC">
+                    All 
+                      rights reserved. Copyright &copy;2007 China Systems Corporation</font></td>
+                  </tr>
+                </table>
+                <p class="l10w"></p>
+              <!--/td-->
+            </tr>
+            <tr> 
+              <td>&nbsp;</td>
+            </tr>
+          </table>
+          <br>
+        </div>
+      </td>
+    </tr>
+  </table>
+   <iframe width="0" height="0" id="SYS_FRAME" style="visibility:hidden"></iframe>
+ </div>   
+</form> 
+</body>
+  <!-- import Vue before Element -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script>
+    new Vue({
+      el: '#LoginDiv',
+      data: function() {
+        return { visible: false }
+      }
+    })	
+  </script>
+</html>

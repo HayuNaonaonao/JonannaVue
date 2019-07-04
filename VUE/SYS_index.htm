@@ -1,0 +1,391 @@
+<html>
+<head>
+<title>China Systems</title>
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+</style>
+<link rel="shortcut icon" href="../../P:/Images/favicon.ico">
+<link href="../P:/theme/softkeystyle.css" type="text/css" rel="stylesheet">
+<script type="text/JavaScript" src="../../P:/SYS_JS/SYS_CrossBrowser.js"></script>
+<script type="text/JavaScript" src="../../P:/SYS_JS/SYS_ActionFunc_CAL.js"></script>
+<script type="text/JavaScript" src="../../P:/SYS_JS/SYS_Ajax.js"></script>
+<script type="text/JavaScript" src="../../P:/SYS_JS/securityPd/SYS_SoftKeyBoard.js"></script>
+<script type="text/JavaScript" src="../../P:/SYS_JS/securityPd/SYS_SecurityMode.js"></script>
+<script type="text/JavaScript" src="../../P:/SYS_JS/securityPd/SYS_MD5.js"></script>
+<link rel="stylesheet" href="../P:/theme/ext-all.css">
+<Script language="javascript" src="../../P:/SYS_JS/Ext/ext-base.js"></Script>
+<Script language="javascript" src="../../P:/SYS_JS/Ext/ext-all.js"></Script>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<!--script language="JavaScript">
+var msg = "::Welcome To Use CS Trade Finance System::";
+var speed = 300; 
+var msgud = " " + msg; 
+function titleScroll() { 
+if (msgud.length <msg.length) msgud += " - " + msg; 
+msgud = msgud.substring(1, msgud.length); 
+document.title = "::Welcome To Use CS Trade Finance System::";
+window.status=msgud.substring(0, msg.length);
+window.setTimeout("titleScroll()", speed); 
+} 
+function emptyFields(textObj)
+  {
+    if(textObj.value.length==0)
+      return true;
+    for(var i=0;i<textObj.value.length;++i)
+    {
+      var ch=textObj.value.charAt(i);
+      if(ch!=' '&&ch!='\t')
+        return false;
+    }
+    return true;
+  }
+  var hasClicked = false;
+function btnLogin()
+  {
+    if(hasClicked){
+    	return;
+    }
+    var loginButton=document.getElementById('Image1');
+    loginButton.disabled=true;
+    var major_version=window.navigator.appVersion.toUpperCase();
+	var ifIE = major_version.indexOf("MSIE");
+	if(ifIE!=-1){
+	var last = major_version.lastIndexOf(";");
+	var ieVersion = major_version.substring(ifIE+4,last);
+	if(parseInt(ieVersion)<6){
+		alert("The version of your browser is lower !Please use IE of version above 6.x!");
+		loginButton.disabled=false;
+		return false;
+	}
+	}
+    var formObj = document.formLogin;
+    if(emptyFields(formObj.C_BUSINESS_UNIT))
+     {
+      alert("Please input a valid UnitCode !"); 
+      formObj.C_BUSINESS_UNIT.focus();
+      loginButton.disabled=false;
+     } 
+    else if(emptyFields(formObj.C_USER_ID))
+     {
+      alert("Please input a valid UserID !");  
+      formObj.C_USER_ID.focus();
+      loginButton.disabled=false;
+     } 
+    else if(emptyFields(formObj.C_PASSWORD))
+     {
+      alert("Please input a valid Password !"); 
+      formObj.C_PASSWORD.focus();
+      loginButton.disabled=false;
+     } 
+    else
+    {   
+      encryptPassword();
+	  /*if(storeCookie) {
+      	setCookieVal();
+      }*/
+     
+	  var vUnitCode = document.forms[0].C_BUSINESS_UNIT.value;
+	  var vUserID=document.forms[0].C_USER_ID.value;
+	  var url="servlets/WSSFullScreen";
+	  var paraData = "_UNIT_CODE="+vUnitCode+"&_USER_ID="+vUserID+"&isBrowserIE="+EEBrowser.ie;
+	  var pwin=openIframe(url,paraData);	
+      hasClicked = true; 
+
+	 }
+  }
+ 
+  function openFullScreen(){	
+	 var swidth = screen.width-10;
+	 var sheight = screen.height-10;
+	 var wStyle = "width=" + swidth + ",height=" + sheight + ",left=0,top=0,scrollbars=no,status=yes,resizable=yes";
+	var thisdate = new Date();
+    var thistime = thisdate.getTime();	
+	var vTar="_login_win_"+thistime;
+	
+	 document.forms[0].target=String(thistime);
+	  _login_win = window.open("",String(thistime),wStyle);
+	 document.formLogin.submit();
+	 	var ieVersion = 0;
+	     var ua = navigator.userAgent.toLowerCase();
+	     if (window.ActiveXObject){
+	         ieVersion = ua.match(/msie ([\d.]*);/)[1];
+	 	}
+	 	if(parseInt(ieVersion)<=6){
+	 	   window.opener = null;
+	 	   window.close();
+	 	}else{
+	 		var closeWinFunc = window.close; 
+	 		window.close = function(){ 
+	 		window.open("","_self"); 
+	 		closeWinFunc(); 
+	 		}
+	 		window.close();
+	 	}
+  }
+  function openIframe(url,paraData){
+		paraData = paraData+"&isLoginPage=Y";
+	  sendRequestByAjaxPost(url,paraData,true,callDebugBack,"","");
+}
+function callDebugBack(xmlhttp){
+	var xmlTemp = xmlhttp.responseXML;
+	if(xmlTemp!=null){
+		var statusElems = xmlTemp.getElementsByTagName("STATUS")[0];
+		var status = "";
+		if(statusElems !=null){
+			status = statusElems.getAttribute("OK");
+		}		
+		if("N"==status){
+			var errMsg = statusElems.text;
+			if(errMsg!=""&&errMsg != null){
+				alert(errMsg);
+				document.getElementById('Image1').disabled=false;
+				hasClicked=false;
+				return;
+				}
+			}
+		}
+	var xml = xmlhttp.responseText;
+	if(xml!=null&&xml=="TRUE"){
+		document.forms[0].target='';
+		document.formLogin.submit();
+	}else{
+		openFullScreen();
+	}
+  }
+  function btnReset()
+{
+   document.formLogin.reset();
+ 		setReset()
+}
+ function MM_preloadImages() { //v3.0   
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+
+	maximizeWin();
+}
+
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+
+function maximizeWin() { 
+   if (window.screen&&window.opener) { 
+    var aw = screen.availWidth; 
+    var ah = screen.availHeight; 
+    window.moveTo(0, 0); 
+    window.resizeTo(aw, ah); 
+	window.opener = null;
+   } 
+} 
+</script-->
+<script>
+
+    new Vue({
+      el: '#app',
+      data: function() {
+        return { visible: false }
+      }
+    })
+</script>
+</head>
+<body onload="MM_preloadImages('image/sys_button.gif')" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <div id="app">
+    <el-button @click="visible = true">Button</el-button>
+    <el-dialog :visible.sync="visible" title="Hello world">
+      <p>Try Element</p >
+    </el-dialog>
+  </div> 
+<form name="formLogin" method="post" action="screen/index.htm" autocomplete="off">
+  <input type="hidden" name="TRX_TYPE">
+     <input type="hidden" name="LOGIN_KEY" id="LOGIN_KEY" value = "">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr> 
+      <td background="Images/top_m.jpg"><img src="Images/top_l.jpg" width="281" height="86"></td>
+      <td background="Images/top_m.jpg" valign="top" align="right"></td>
+      <td background="Images/top_m.jpg"> 
+        <div align="right"><img src="Images/top_r.jpg" width="237" height="86"></div>
+      </td>
+    </tr>
+    <tr> 
+      <td height="405" colspan="3"> 
+        <div align="center"><br>
+          <table width="500" height="0" border="0" cellpadding="0" cellspacing="0">
+            <tr> 
+              <td width="500">&nbsp;</td>
+            </tr>
+            <tr> 
+              <td height="310"> 
+                <table height="206" border="0" cellpadding="0" cellspacing="0">
+                  <tr class="c10w"> 
+                    <td height="2" colspan="4">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td width="4" height="20">&nbsp;</td>
+                    <td width="1" height="20"><img src="Images/arrow.gif" width="8" height="11"></td>
+                    <td height="20" colspan="2"><img src="Images/login.jpg" width="55" height="21"></td>
+                  </tr>
+                  <tr> 
+                    <td height="168"> 
+                      <p>&nbsp;</p>
+                    </td>
+                    <td background="Images/vertical_line.gif">&nbsp;</td>
+                    <td width="14"> 
+						<IMG src="Images/COINS.jpg">
+                    <td width="481" height="168" valign="bottom"><div id="MSG_ID" class="r10w" style="display:none"><B>Please wait a minute to continue...</B></div><br>
+                      <div align="right"> 
+                        <table width="96%" border="0" cellspacing="0" class="j10w">
+                          <tr> 
+                            <td width="30%" valign="top" class="r10w">Unit Code: 
+                            </td>
+                            <td width="70%"> 
+                              <input type="hidden" name="OP_TYPE" value="LOGIN">
+                              <input type="text" name="C_BUSINESS_UNIT" size="15" class="login" onKeydown="EEHtml.moveFocus();">
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td width="30%" valign="top" class="r10w">User ID: 
+                            </td>
+                            <td width="70%"> 
+                              <input name="C_USER_ID" type="text" size="15" class="login" onKeydown="EEHtml.moveFocus();">
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td valign="top" class="r10w">Password: </td>
+                            <td> 
+                               <input id="tipLogPwd" name="C_PASSWORD" type="password" autocomplete="off" size="15" class="login" onKeydown="if(EEHtml.getKeyCode()==13)btnLogin()"value="">
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td colspan="2" class="r10w">  
+                            <input type="button" class="sbtn_default" name="Image1" value="Login" id="Image1" onClick="btnLogin()"  onMouseOver="this.className='sbtn_light'" onMouseOut="this.className='sbtn_default'" />
+                            <input type="button" class="sbtn_default" name="Image2" value="Reset" id="Image2" onClick="btnReset()"  onMouseOver="this.className='sbtn_light'" onMouseOut="this.className='sbtn_default'" />
+								<img id="openKeyBoard" src="Images/buttons/Kb02.jpg" style="display:none;"
+									onclick="showkeyboard()" width="23" height="23">
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td height="8"></td>
+                    <td><img src="Images/joint_line.gif" width="8" height="8"></td>
+                    <td height="8" colspan="2" background="Images/horizontal_line.gif" align="right"><img src="Images/arrow_right.gif" width="7" height="8"></td>
+                  </tr>
+                  <tr class="l10w"> 
+                    <td height="8"></td>
+                    <td>&nbsp;</td>
+                    <td height="8" colspan="2" class="r10w">
+                    <font id="copyRight" color="#CCCCCC">
+                    All 
+                      rights reserved. Copyright &copy;2007 China Systems Corporation</font></td>
+                  </tr>
+                </table>
+                <p class="l10w"></p>
+              </td>
+            </tr>
+            <tr> 
+              <td>&nbsp;</td>
+            </tr>
+          </table>
+          <br>
+        </div>
+      </td>
+    </tr>
+  </table>
+   <iframe width="0" height="0" id="SYS_FRAME" style="visibility:hidden"></iframe>
+</form>
+<script language="javascript">
+
+    var obj=document.getElementById("copyRight");
+   obj.innerHTML="All rights reserved. Copyright &copy; 2001-2011 China Systems Corporation";
+ function setCookieVal(){
+   try{
+     var userName= document.formLogin.C_USER_ID.value;
+     var unitCode=document.formLogin.C_BUSINESS_UNIT.value;
+	 var nextYear=new Date();
+     nextYear.setFullYear(nextYear.getFullYear()+1);
+     if((userName!="") && (unitCode!="")){
+      	document.cookie="EXIMBILLSUSERINFO="+userName+"; expires="+nextYear.toGMTString();
+		document.cookie="EXIMBILLSUNITCODE="+unitCode+"; expires="+nextYear.toGMTString();
+	}
+     else{
+      	if((userName!="") && (unitCode=="")){
+     		document.cookie="EXIMBILLSUSERINFO="+userName+";expires="+nextYear.toGMTString();
+			document.cookie="EXIMBILLSUNITCODE=CN; expires="+nextYear.toGMTString();
+		}
+     }
+   }catch(e){
+	  }
+ }
+ 
+ 
+ function getCookieVal (offset) {
+	 try{
+  var endstr = document.cookie.indexOf (";", offset);
+  if (endstr == -1)
+      endstr = document.cookie.length;
+  return unescape(document.cookie.substring(offset, endstr));
+	 }catch(e){
+		 }
+ }
+ function GetCookie (name) {
+	 try{
+	var arg = name + "=";
+    var alen = arg.length;
+    var clen = document.cookie.length;
+    var i = 0;
+    while (i < clen) {
+		var j = i + alen;
+		if (document.cookie.substring(i, j) == arg)
+			return getCookieVal (j);
+        i = document.cookie.indexOf(" ",i) + 1;
+		if (i == 0) break;
+    }
+    return "";
+	 }catch(e){
+		 }
+ }
+/*if(storeCookie) {
+ var user = GetCookie("EXIMBILLSUSERINFO");
+ var unitcode = GetCookie("EXIMBILLSUNITCODE");
+ document.formLogin.C_USER_ID.value = user;
+ document.formLogin.C_BUSINESS_UNIT.value= unitcode;
+
+ if (unitcode == "") {
+  document.formLogin.C_BUSINESS_UNIT.focus();
+ } else {
+ try{
+ 	document.formLogin.C_PASSWORD.focus();
+ }catch(e){
+ 
+ }
+ }
+}*/
+
+	//waitFocusEvent();
+</script>
+<script>
+if (top != self)    {
+	top.location=self.location;
+	}
+</script>
+</body>
+</html>
